@@ -79,7 +79,11 @@ def main():
     try:
         closes = {r["Code"]: df["Close"] for r, df in zip(rows, dfs) if df is not None and len(df)}
         top = uni[uni["Market"] == "KOSPI"].nlargest(100, "Marcap")
-        sectors = analyze_sectors(top, closes, fdr.DataReader("KS11", start)["Close"])
+        kospi = fdr.DataReader("KS11", start)["Close"].dropna()
+        if kospi.index[-1].strftime("%Y-%m-%d") != data_date:   # 지수 데이터가 하루 늦으면 KODEX200으로 대체
+            print("KS11 지연 → KODEX200(069500) 사용")
+            kospi = fdr.DataReader("069500", start)["Close"].dropna()
+        sectors = analyze_sectors(top, closes, kospi)
     except Exception as e:
         print("업종 분석 실패:", e)
 

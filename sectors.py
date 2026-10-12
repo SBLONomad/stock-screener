@@ -20,7 +20,7 @@ def naver_sector_map() -> dict:
     try:
         html = requests.get(f"{NAVER}/sise/sise_group.naver?type=upjong", headers=UA, timeout=15)
         html.encoding = "euc-kr"
-        groups = re.findall(r'sise_group_detail\.naver\?type=upjong&no=(\d+)">([^<]+)</a>', html.text)
+        groups = re.findall(r'sise_group_detail\.naver\?type=upjong&(?:amp;)?no=(\d+)"[^>]*>([^<]+)</a>', html.text)
         m = {}
         for no, name in groups:
             r = requests.get(f"{NAVER}/sise/sise_group_detail.naver?type=upjong&no={no}", headers=UA, timeout=15)
