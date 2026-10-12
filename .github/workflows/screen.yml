@@ -2,11 +2,12 @@ name: daily-screen
 
 on:
   schedule:
-    - cron: "35 6 * * 1-5"   # 평일 15:35 KST (GitHub 사정으로 5~20분 늦을 수 있음)
-  workflow_dispatch: {}       # Actions 탭에서 수동 실행
-  push:                       # 스크리너 코드가 바뀌면 바로 한 번 실행
+    - cron: "37 8 * * 1-5"   # 평일 17:37 KST
+    - cron: "52 8 * * 1-5"   # 평일 17:52 KST (백업)
+  workflow_dispatch: {}
+  push:
     branches: [main]
-    paths: ["screener.py", "indicators.py", "requirements.txt", ".github/workflows/screen.yml"]
+    paths: ["screener.py", "indicators.py", "sectors.py", "notify.py", "requirements.txt", ".github/workflows/screen.yml"]
 
 permissions:
   contents: write
@@ -21,11 +22,26 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install -r requirements.txt
-      - run: python screener.py
+      - id: run
+        run: python screener.py
       - name: Commit result
+        if: steps.run.outputs.skip != 'true'
         run: |
           git config user.name "screen-bot"
           git config user.email "screen-bot@users.noreply.github.com"
-          git add data/latest.json
+          git add data/
           git diff --cached --quiet || git commit -m "screen $(TZ=Asia/Seoul date +%F)"
           git pull --rebase origin main && git push
+      - name: 카카오톡·메일 발송
+        if: steps.run.outputs.skip != 'true' && github.event_name != 'push'
+        env:
+          HOLDINGS_JSON: ${{ secrets.HOLDINGS_JSON }}
+          KAKAO_REST_KEY: ${{ secrets.KAKAO_REST_KEY }}
+          KAKAO_REFRESH_TOKEN: ${{ secrets.KAKAO_REFRESH_TOKEN }}
+          KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
+          GH_PAT: ${{ secrets.GH_PAT }}
+          GH_REPO: ${{ github.repository }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          MAIL_TO: ${{ secrets.MAIL_TO }}
+        run: python notify.py
