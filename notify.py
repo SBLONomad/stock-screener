@@ -1,7 +1,7 @@
 """latest.json + 보유 정보(시크릿)로 숫자 리포트를 만들어 카카오톡(나에게 보내기)·이메일로 발송.
 
 필요한 GitHub Secrets (없는 채널은 건너뜀)
-- HOLDINGS_JSON        {"011930":{"name":"신성이엔지","avg":20105,"qty":544}, ...}  ← 평단·수량은 공개 저장소에 두지 않음
+- HOLDINGS_JSON        {"005930":{"name":"삼성전자","avg":70000,"qty":10}, ...}  ← 평단·수량은 공개 저장소에 두지 않음
 - KAKAO_REST_KEY, KAKAO_REFRESH_TOKEN, (선택) KAKAO_CLIENT_SECRET
 - GH_PAT               (선택) 카카오 refresh token이 갱신되면 시크릿을 자동 교체
 - GMAIL_USER, GMAIL_APP_PASSWORD, MAIL_TO
