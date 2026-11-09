@@ -26,7 +26,7 @@ GitHub → Settings → Secrets and variables → Actions → New repository sec
 
 | Secret | 값 |
 |---|---|
-| `HOLDINGS_JSON` | `{"011930":{"avg":20105,"qty":544},"042660":{"avg":107440,"qty":75},"IREN":{"avg":38.53,"qty":66}}` |
+| `HOLDINGS_JSON` | `{"005930":{"avg":70000,"qty":10},"000660":{"avg":180000,"qty":3},"AAPL":{"avg":190.5,"qty":5}}` |
 | `GMAIL_USER` / `MAIL_TO` | 보내는 Gmail / 받을 주소 |
 | `GMAIL_APP_PASSWORD` | Google 계정 → 보안 → 2단계 인증 → 앱 비밀번호(16자리) |
 | `KAKAO_REST_KEY` | 카카오 디벨로퍼스 앱의 REST API 키 |
